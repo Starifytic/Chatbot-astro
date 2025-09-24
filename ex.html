@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+    }
+    #chatbox {
+      width: 400px;
+      height: 400px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      overflow-y: auto;
+      background: white;
+      margin: 20px auto;
+    }
+    #userInput {
+      width: 300px;
+      padding: 10px;
+    }
+    #sendBtn {
+      padding: 10px;
+    }
+    .user {
+      color: blue;
+      margin: 5px 0;
+    }
+    .bot {
+      color: green;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <h2 style="text-align:center;">Simple Chatbot</h2>
+  
+  <div id="chatbox"></div>
+  
+  <div style="text-align:center; margin-top:10px;">
+    <input type="text" id="userInput" placeholder="Type a message...">
+    <button id="sendBtn">Send</button>
+  </div>
+
+  <script src="chatbot.js"></script>
+</body>
+</html>
