@@ -16,6 +16,16 @@ function getBotResponse(input) {
         return " Accuracy depends on correct birth details and interpretation. Astrology gives guidance and tendencies, not fixed guarantees.";
     } else if (input.includes("how long does astrology predictions take?") || input.includes("how long it takes?") ) {
         return " Typically 20 to 60 minutes depending on the depth (basic reading, detailed life chart, relationship, career, etc.).";
+    } else if (input.includes("do we get any gemstones?")|| input.includes("what gemstone should I use?")) {
+        return "Yes,Gemstones are sold here.The gemstone to be prescribed depends on your horoscope.";
+    } else if (input.includes("can astrology change my future?")|| input.includes("will astrology change my future?")) {
+        return "Astrology shows possible paths and timing. Remedies (gemstones, mantras, rituals, lifestyle changes) can help improve outcomes, but free will and actions also matter.";
+    } else if(input.includes("is my information kept private?")){
+        return "Yes, your information is 100% confidentiality is maintained. Your details and chart are not shared with anyone.";
+    } else if(input.includes("Can I consult online or only in person?")){
+        return "Both options are available (phone, WhatsApp, Zoom, or in-office).";
+    }else if(input.includes("How often should I consult an astrologer?")){
+        return "Once for a detailed life reading, and then whenever you face major decisions or challenges (career, marriage, business, health).";
     } else {
         return "Sorry, I don't understand.";
     }
@@ -48,3 +58,4 @@ document.getElementById("userInput").addEventListener("keypress", function (e) {
         document.getElementById("sendBtn").click();
     }
 });
+
