@@ -14,6 +14,8 @@ function getBotResponse(input) {
         return " Usually date of birth, time of birth, and place of birth. If exact birth time is not known, other methods like palmistry, numerology, or Prashna (horary astrology) can be used.";
     } else if (input.includes("how accurate are astrology predictions?") || input.includes("accuracy") ) {
         return " Accuracy depends on correct birth details and interpretation. Astrology gives guidance and tendencies, not fixed guarantees.";
+    } else if (input.includes("how long does astrology predictions take?") || input.includes("how long it takes?") ) {
+        return " Typically 20 to 60 minutes depending on the depth (basic reading, detailed life chart, relationship, career, etc.).";
     } else {
         return "Sorry, I don't understand.";
     }
