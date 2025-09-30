@@ -82,3 +82,4 @@ document.getElementById("sendBtn").addEventListener("click", async () => {
 document.getElementById("userInput").addEventListener("keypress", e => {
     if (e.key === "Enter") document.getElementById("sendBtn").click();
 });
+
