@@ -1,64 +1,84 @@
-// Function to generate bot response
-function getBotResponse(input) {
+const OPENAI_KEY = "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"; // Only for demo/personal use
+
+function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+function showTyping() {
+    const chatbox = document.getElementById("chatbox");
+    const div = document.createElement("div");
+    div.classList.add("message", "bot");
+    div.id = "typingIndicator";
+    div.textContent = "Bot is typing...";
+    chatbox.appendChild(div);
+    chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+function hideTyping() {
+    const div = document.getElementById("typingIndicator");
+    if (div) div.remove();
+}
+
+function addMessage(sender, msg) {
+    const chatbox = document.getElementById("chatbox");
+    const div = document.createElement("div");
+    div.classList.add("message", sender);
+    div.textContent = msg;
+    chatbox.appendChild(div);
+    chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+async function fetchAIResponse(prompt) {
+    try {
+        const res = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${OPENAI_KEY}`
+            },
+            body: JSON.stringify({
+                model: "gpt-3.5-turbo",
+                messages: [{ role: "user", content: prompt }],
+                max_tokens: 150
+            })
+        });
+        const data = await res.json();
+        return data.choices[0].message.content;
+    } catch {
+        return "AI is unavailable right now.";
+    }
+}
+
+async function getBotResponse(input) {
     input = input.toLowerCase();
 
-    if (input.includes("hi") || input.includes("hello")) {
-        return "Hello there!";
-    } else if (input.includes("bye")) {
-        return "Goodbye!";
-    } else if (input.includes("office") || input.includes("location")) {
-        return "The office is in UCP-037, Bengal Ambuja, City Center, Opposite to Hotel Banerjee Inn Durgapur, West Bengal";
-    } else if (input.includes("fees") || input.includes("consultation charge")) {
-        return "The fee is 1,000 and it is valid for 1 month";
-    } else if (input.includes("what information do you need for a consultation?") || input.includes("information for a consultation?")) {
-        return " Usually date of birth, time of birth, and place of birth. If exact birth time is not known, other methods like palmistry, numerology, or Prashna (horary astrology) can be used.";
-    } else if (input.includes("how accurate are astrology predictions?") || input.includes("accuracy") ) {
-        return " Accuracy depends on correct birth details and interpretation. Astrology gives guidance and tendencies, not fixed guarantees.";
-    } else if (input.includes("how long does astrology predictions take?") || input.includes("how long it takes?") ) {
-        return " Typically 20 to 60 minutes depending on the depth (basic reading, detailed life chart, relationship, career, etc.).";
-    } else if (input.includes("do we get any gemstones?")|| input.includes("what gemstone should I use?")) {
-        return "Yes, Gemstones are sold here. The gemstone to be prescribed depends on your horoscope.";
-    } else if (input.includes("can astrology change my future?")|| input.includes("will astrology change my future?")) {
-        return "Astrology shows possible paths and timing. Remedies (gemstones, mantras, rituals, lifestyle changes) can help improve outcomes, but free will and actions also matter.";
-    } else if(input.includes("is my information kept private?")){
-        return "Yes, your information is 100% confidential and is maintained. Your details and chart are not shared with anyone.";
-    } else if(input.includes("Can I consult online or only in person?")){
-        return "Both options are available (phone, WhatsApp, Zoom, or in-office).";
-    }else if(input.includes("How often should I consult an astrologer?")){
-        return "Once for a detailed life reading, and then whenever you face major decisions or challenges (career, marriage, business, health).";
-     } else if(input.includes("What are the office timings?")|| input.includes("timings?")){
-        return"The timings are as follows: 1. Day Timings are from 10:30 am to 1 pm, 2. Evening timings are from 6 pm to 9 pm 3. Sundays are off.";
-    } else {
-        return "Sorry, I don't understand. Please get in touch with Shastri Ji at mobile no 9609604638";
-    }
+    if (input.includes("hi") || input.includes("hello")) return "Hello there!";
+    if (input.includes("bye")) return "Goodbye!";
+    if (input.includes("office") || input.includes("location")) return "The office is in UCP-037, Bengal Ambuja, City Center, Opposite to Hotel Banerjee Inn Durgapur, West Bengal";
+    if (input.includes("fees") || input.includes("consultation charge")) return "The fee is 1,000 and it is valid for 1 month";
+    if (input.includes("gemstone")) return "Yes, Gemstones are sold here. The gemstone to be prescribed depends on your horoscope.";
+    if (input.includes("private")) return "Your information is 100% confidential.";
+    if (input.includes("timings") || input.includes("consult")) return "Day: 10:30-1pm, Evening: 6-9pm, Sundays off.";
+
+    showTyping();
+    await sleep(1200);
+    const answer = await fetchAIResponse(input);
+    hideTyping();
+    return answer;
 }
 
-// Add message to chat
-function addMessage(sender, message) {
-    const chatbox = document.getElementById("chatbox");
-    chatbox.innerHTML += `<div class="${sender}">${sender === "user" ? "You" : "Bot"}: ${message}</div>`;
-    chatbox.scrollTop = chatbox.scrollHeight; // auto scroll
-}
+document.getElementById("sendBtn").addEventListener("click", async () => {
+    const input = document.getElementById("userInput");
+    const text = input.value.trim();
+    if (!text) return;
 
-// Handle user input
-document.getElementById("sendBtn").addEventListener("click", () => {
-    const userInput = document.getElementById("userInput");
-    const userText = userInput.value.trim();
+    addMessage("user", "You: " + text);
+    const reply = await getBotResponse(text);
+    await sleep(400);
+    addMessage("bot", "Bot: " + reply);
 
-    if (userText !== "") {
-        addMessage("user", userText);
-        let botResponse = getBotResponse(userText);
-        addMessage("bot", botResponse);
-    }
-
-    userInput.value = "";
+    input.value = "";
+    input.focus();
 });
 
-// Allow pressing Enter key
-document.getElementById("userInput").addEventListener("keypress", function (e) {
-    if (e.key === "Enter") {
-        document.getElementById("sendBtn").click();
-    }
+document.getElementById("userInput").addEventListener("keypress", e => {
+    if (e.key === "Enter") document.getElementById("sendBtn").click();
 });
-
-
